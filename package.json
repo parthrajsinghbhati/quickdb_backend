@@ -1,0 +1,27 @@
+{
+  "name": "quickdb-backend",
+  "version": "1.0.0",
+  "description": "Backend API for QuickDB with authentication",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@prisma/client": "^6.18.0",
+    "nodemon": "^3.0.2",
+    "prisma": "^6.18.0"
+  },
+  "type": "module"
+}
