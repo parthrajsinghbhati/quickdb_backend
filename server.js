@@ -1,11 +1,19 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
+import cors from "cors"
 
 dotenv.config();
 
+
+
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+app.use(cors({
+  origin: ['https://quick-db.vercel.app/',"http://localhost:5174"],
+  credentials: true
+}));
 
 
 app.use(express.json());
