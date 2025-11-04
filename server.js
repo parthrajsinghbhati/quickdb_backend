@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: ['http://localhost:5174','https://quick-db.vercel.app/'],
+  origin: 'https://quick-db.vercel.app/',
   credentials: true
 }));
 
