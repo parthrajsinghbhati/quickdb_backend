@@ -1,16 +1,17 @@
-import jwt from 'jsonwebtoken';
+const jwt = require('jsonwebtoken');
 
-export const generateToken = (userId) => {
+const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
 };
 
-export const verifyToken = (token) => {
+const verifyToken = (token) => {
   return jwt.verify(token, process.env.JWT_SECRET);
 };
 
-export const authMiddleware = (req, res, next) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
-  
+const authMiddleware = (req, res, next) => {
+  const authHeader = req.header('Authorization');
+  const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.substring(7) : null;
+
   if (!token) {
     return res.status(401).json({ error: 'Access denied. No token provided.' });
   }
@@ -22,4 +23,10 @@ export const authMiddleware = (req, res, next) => {
   } catch (error) {
     res.status(401).json({ error: 'Invalid token.' });
   }
+};
+
+module.exports = {
+  generateToken,
+  verifyToken,
+  authMiddleware,
 };

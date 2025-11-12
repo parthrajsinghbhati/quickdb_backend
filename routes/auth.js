@@ -1,8 +1,8 @@
-import express from 'express';
-import { body, validationResult } from 'express-validator';
-import bcrypt from 'bcryptjs';
-import { PrismaClient } from '@prisma/client';
-import { generateToken } from '../utils/jwt.js';
+const express = require('express');
+const { body, validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
+const { PrismaClient } = require('../generated');
+const { generateToken } = require('../utils/jwt.js');
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -78,20 +78,20 @@ router.post('/login',
 
       const { email, password } = req.body;
 
-      // Find user
-      const user = await prisma.user.findUnique({
-        where: { email }
-      });
+  // Find user
+  const user = await prisma.user.findUnique({
+    where: { email }
+  });
 
-      if (!user) {
-        return res.status(401).json({ message: 'Invalid credentials' });
-      }
+  if (!user) {
+    return res.status(404).json({ message: 'User not found. Please sign up first.' });
+  }
 
-      // Check password
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-      if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Invalid credentials' });
-      }
+  // Check password
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    return res.status(401).json({ message: 'Invalid credentials. Please check your password.' });
+  }
 
       // Generate token
       const token = generateToken(user.id);
@@ -112,4 +112,4 @@ router.post('/login',
   }
 );
 
-export default router;
+module.exports = router;

@@ -1,9 +1,9 @@
-import dotenv from "dotenv";
+const dotenv = require("dotenv");
 dotenv.config();
 
-import express from "express";
-import cors from "cors";
-import authRoutes from "./routes/auth.js";
+const express = require("express");
+const cors = require("cors");
+const authRoutes = require("./routes/auth.js");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
