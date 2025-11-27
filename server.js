@@ -4,15 +4,21 @@ dotenv.config();
 const express = require("express");
 const cors = require("cors");
 const authRoutes = require("./routes/auth.js");
+const databaseRoutes = require("./routes/database.js");
+const tableRoutes = require("./routes/table.js");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.use(cors());
 
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/databases", databaseRoutes);
+app.use("/api/tables", tableRoutes);
+app.use("/api/data", require("./routes/data.js"));
+app.use("/api/keys", require("./routes/apiKeys.js"));
 
 app.get("/", (req, res) => {
   res.json({ message: "QuickDB Authentication API is running!" });
