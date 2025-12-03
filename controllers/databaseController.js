@@ -33,6 +33,8 @@ exports.getDatabases = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 9;
     const search = req.query.search || '';
+    const sortBy = req.query.sortBy || 'createdAt';
+    const order = req.query.order || 'desc';
     const skip = (page - 1) * limit;
 
     const where = {
@@ -42,13 +44,20 @@ exports.getDatabases = async (req, res) => {
         mode: 'insensitive'
       }
     };
-
+    
+    let orderBy = {};
+    if (sortBy === 'name') {
+      orderBy = { name: order };
+    } else {
+      orderBy = { createdAt: order };
+    }
+    
     const [databases, total] = await Promise.all([
       prisma.database.findMany({
         where,
         skip,
         take: limit,
-        orderBy: { createdAt: 'desc' },
+        orderBy,
         include: {
           _count: {
             select: { tables: true }

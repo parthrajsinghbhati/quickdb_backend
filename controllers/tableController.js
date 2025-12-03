@@ -39,6 +39,8 @@ exports.getTables = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 9;
     const search = req.query.search || '';
+    const sortBy = req.query.sortBy || 'createdAt';
+    const order = req.query.order || 'desc';
     const skip = (page - 1) * limit;
 
     if (!databaseId) {
@@ -64,13 +66,20 @@ exports.getTables = async (req, res) => {
         mode: 'insensitive'
       }
     };
+    
+    let orderBy = {};
+    if (sortBy === 'name') {
+      orderBy = { name: order };
+    } else {
+      orderBy = { createdAt: order };
+    }
 
     const [tables, total] = await Promise.all([
       prisma.table.findMany({
         where,
         skip,
         take: limit,
-        orderBy: { createdAt: 'desc' }
+        orderBy
       }),
       prisma.table.count({ where })
     ]);
